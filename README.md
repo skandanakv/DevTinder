@@ -1,4 +1,4 @@
-#DevTinder
+# DevTinder
 
 > Tinder for Developers to connect and build their network
 
