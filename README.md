@@ -14,4 +14,6 @@
 - HTTP Methods
 - Postman Api Testing
 - learnt about order of execution in routing
--
+- learnt regex
+- query parameters
+- dynamic routing
