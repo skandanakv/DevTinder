@@ -7,12 +7,12 @@ app.use("/test",(req,res)=>{
     res.send("hello from server");
 })
 
-app.use("/hello",(req,res)=>{
-    res.send("hello hello hello");
-})
-
 app.use("/hello/2",(req,res)=>{
     res.send("hello 2");
+})
+
+app.use("/hello",(req,res)=>{
+    res.send("hello hello hello");
 })
 
 app.use("/",(req,res)=>{

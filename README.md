@@ -11,3 +11,5 @@
 - learnt diff between package.json and package-lock.json
 - learnt how to handle requests, routes and also learnt how to avoid constant restarts with nodemon
 - understood handling routes and routes extensions
+- HTTP Methods
+- Postman Api Testing
