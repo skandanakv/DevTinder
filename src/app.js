@@ -7,16 +7,23 @@ app.use("/test",(req,res)=>{
     res.send("hello from server");
 })
 
-app.use("/hello/2",(req,res)=>{
-    res.send("hello 2");
+app.use("/user",(req,res)=>{        
+    res.send("hahah");
 })
 
-app.use("/hello",(req,res)=>{
-    res.send("hello hello hello");
+//only handles get calls from /user
+app.get("/user",(req,res)=>{
+    res.send({firstName:"skandana",lastName:"kv"});
 })
 
-app.use("/",(req,res)=>{
-    res.send("first route");
+app.post("/user",(req,res)=>{
+    //saving data to db
+    res.send("user data saved successfully");
+})
+
+app.delete("/user",(req,res)=>{
+    //deleting data from db
+    res.send("user data deleted successfully");
 })
 
 app.listen(3000, ()=>{

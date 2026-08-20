@@ -13,3 +13,5 @@
 - understood handling routes and routes extensions
 - HTTP Methods
 - Postman Api Testing
+- learnt about order of execution in routing
+-
