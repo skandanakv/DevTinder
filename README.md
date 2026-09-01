@@ -25,3 +25,5 @@
 - learnt about authorisation
 - industry practices for maintaing middleware code
 - understood imp of middleware in authorisation and use of next() here
+- graceful error handling using 4 variable parameters and try catch block
+- status codes
