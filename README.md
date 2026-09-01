@@ -17,3 +17,11 @@
 - learnt regex
 - query parameters
 - dynamic routing
+- experimented with multiple route handlers with next
+- what is middleware?
+- Understood the role of middleware in the request-response cycle
+- Experimented with placing next(), console.log(), and res.send() in different positions
+- need to middlewares - learntt
+- learnt about authorisation
+- industry practices for maintaing middleware code
+- understood imp of middleware in authorisation and use of next() here
