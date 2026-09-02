@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 require("./config/database"); //require this file here 
 const connectDb = require ('./config/database');
