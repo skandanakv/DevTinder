@@ -1,18 +1,14 @@
 const express = require("express");
-
+require("./config/database"); //require this file here 
+const connectDb = require ('./config/database');
 const app = express();
 
-app.get("/getUserData", (req,res)=>{
-    try{
- throw new Error("ffgsgjkjhvcxdsfghnb");
-    res.send("User data");
-    }
-    catch(err){
-        res.status(500).send("Internal Server Error contact support team");
-    }
-   
-})
 
-app.listen(3000, () => {
+connectDb().then(()=>{
+    console.log("Database connected successfully");
+    app.listen(3000, () => {
     console.log("Server is running on port 3000");
 });
+}).catch((err)=>{
+    console.log("Error connecting to database", err);
+})
