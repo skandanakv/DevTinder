@@ -31,3 +31,4 @@
 ## Implementation
 
 - conected Application to Mongo cluster
+- created user schema and model
