@@ -22,6 +22,15 @@ app.get("/user", async(req,res)=>{
     }
 })
 
+//feed api to get all users
+app.get("/feed", async (req,res)=>{
+    try{
+        const users=await User.find({}); //passing empty filter to get all users
+        res.send(users);
+    }catch(err){
+        res.status(500).send("Error fetching feed: " + err.message);
+    }
+})
 
 app.post("/signup", async (req,res)=>{
     const user = new User(req.body);

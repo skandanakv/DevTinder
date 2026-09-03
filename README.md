@@ -36,3 +36,4 @@
 - dummy data pushed using this api call via postman
 - adding dynamic data - signup api
 - get user by emailId API
+- feed api to get all users
