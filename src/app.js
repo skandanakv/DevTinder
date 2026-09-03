@@ -46,6 +46,21 @@ app.delete("/user", async(req,res)=>{
     }
 })
 
+//modify user by id - patch
+app.patch("/user", async(req, res)=>{
+    const userId=req.body._id;
+    const data=req.body;
+    try{
+        const user=await User.findByIdAndUpdate(userId, data, {returnDocument: "after"});
+        if(!user){
+            return res.status(404).send("User not found");
+        }
+        res.send(user);
+    }catch(err){
+        res.status(500).send("Error updating user: " + err.message);
+    }
+})
+
 app.post("/signup", async (req,res)=>{
     const user = new User(req.body);
 
