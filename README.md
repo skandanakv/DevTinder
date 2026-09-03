@@ -37,3 +37,4 @@
 - adding dynamic data - signup api
 - get user by emailId API
 - feed api to get all users
+- delete user by \_id

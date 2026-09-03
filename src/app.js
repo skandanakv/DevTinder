@@ -32,6 +32,20 @@ app.get("/feed", async (req,res)=>{
     }
 })
 
+//delete user by id
+app.delete("/user", async(req,res)=>{
+    const userId=req.body._id;
+    try{
+        const user=await User.findByIdAndDelete(userId);
+        if(!user){
+            return res.status(404).send("User not found");
+        }
+        res.send("User deleted successfully");
+    }catch(err){
+        res.status(500).send("Error deleting user: " + err.message);
+    }
+})
+
 app.post("/signup", async (req,res)=>{
     const user = new User(req.body);
 
