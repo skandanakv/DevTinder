@@ -34,3 +34,5 @@
 - created user schema and model
 - created a /signup api
 - dummy data pushed using this api call via postman
+- adding dynamic data - signup api
+- get user by emailId API

@@ -8,6 +8,21 @@ const app = express();
 app.use(express.json());
 
 
+//get user by email
+app.get("/user", async(req,res)=>{
+    const userEmail=req.body.email;
+    try{
+        const user=await User.findOne({email:userEmail});
+        if(!user){
+            return res.status(404).send("User not found");
+        }
+        res.send(user);
+    }catch(err){
+        res.status(500).send("Error fetching user: " + err.message);
+    }
+})
+
+
 app.post("/signup", async (req,res)=>{
     const user = new User(req.body);
 
@@ -19,10 +34,6 @@ await user.save();
     }
    
 })
-
-
-
-
 
 
 connectDb().then(()=>{
