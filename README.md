@@ -38,3 +38,5 @@
 - get user by emailId API
 - feed api to get all users
 - delete user by \_id
+- data validation schemas
+- API level data validation

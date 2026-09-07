@@ -47,9 +47,20 @@ app.delete("/user", async(req,res)=>{
 })
 
 //modify user by id - patch
-app.patch("/user", async(req, res)=>{
-    const userId=req.body._id;
+app.patch("/user/:id", async(req, res)=>{
+    const userId=req.params?.id;
     const data=req.body;
+
+    const ALLOWED_UPDATES = [
+    "about","skills", "photoUrl", "age", "gender"
+    ]
+    
+    const isUpdateAllowed = Object.keys(data).every((k)=> ALLOWED_UPDATES.includes(k));
+    if(!isUpdateAllowed){
+        return res.status(400).send("Updates Not Allowed");
+    }
+
+
     try{
         const user=await User.findByIdAndUpdate(userId, data, {
             returnDocument: "after", runValidators: true
@@ -63,16 +74,45 @@ app.patch("/user", async(req, res)=>{
     }
 })
 
-app.post("/signup", async (req,res)=>{
-    const user = new User(req.body);
-    try{
-await user.save();
-   res.send("User created successfully");
-    }catch(err){
-        res.status(400).send("Error creating user: " + err.message);
+app.post("/signup", async (req, res) => {
+
+    const data = req.body;
+
+    const ALLOWED_FIELDS = [
+        "firstName",
+        "lastName",
+        "email",
+        "password",
+        "age",
+        "gender",
+        "photoUrl",
+        "about",
+        "skills"
+    ];
+
+    const isAllowed = Object.keys(data).every((field) =>
+        ALLOWED_FIELDS.includes(field)
+    );
+
+    if (!isAllowed) {
+        return res.status(400).send("Invalid fields provided");
     }
-   
-})
+
+    try {
+
+        const user = new User(data);
+
+        await user.save();
+
+        res.send("User created successfully");
+
+    } catch (err) {
+
+        res.status(400).send("Error creating user: " + err.message);
+
+    }
+
+});
 
 
 connectDb().then(()=>{
