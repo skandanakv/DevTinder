@@ -51,7 +51,9 @@ app.patch("/user", async(req, res)=>{
     const userId=req.body._id;
     const data=req.body;
     try{
-        const user=await User.findByIdAndUpdate(userId, data, {returnDocument: "after"});
+        const user=await User.findByIdAndUpdate(userId, data, {
+            returnDocument: "after", runValidators: true
+        });
         if(!user){
             return res.status(404).send("User not found");
         }
@@ -63,7 +65,6 @@ app.patch("/user", async(req, res)=>{
 
 app.post("/signup", async (req,res)=>{
     const user = new User(req.body);
-
     try{
 await user.save();
    res.send("User created successfully");
