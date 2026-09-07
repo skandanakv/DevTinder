@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const validator = require("validator");
 
 const userSchema = new mongoose.Schema(
     {
@@ -22,11 +23,23 @@ const userSchema = new mongoose.Schema(
             unique: true,
             lowercase: true,
             trim: true,
+            validate(value){
+                if(!validator.isEmail(value)){
+                    throw new Error("Invalid email address");
+                }
+
+            }
         },
 
         password: {
             type: String,
             required: true,
+            validate(value) {
+                if (!validator.isStrongPassword(value)) {
+                    throw new Error("Password is not strong enough");
+                
+                }
+            },
         },
 
         age: {
@@ -56,6 +69,11 @@ const userSchema = new mongoose.Schema(
             type: String,
             default:
                 "https://sc-auetal.de/wp-content/uploads/2018/04/personal-dummy.png",
+                validate(value) {
+                    if (value && !validator.isURL(value)) {
+                        throw new Error("Invalid URL for photo");
+                    }
+                }
         },
 
         about: {

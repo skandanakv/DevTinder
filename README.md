@@ -40,3 +40,5 @@
 - delete user by \_id
 - data validation schemas
 - API level data validation
+- used validator package
+- email, password and other schema level validators added
