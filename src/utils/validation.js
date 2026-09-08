@@ -19,6 +19,18 @@ const validateSignup=(req)=>{
 
 }
 
+const validateLogin=(req)=>{
+    const{email,password}=req.body;
+
+    if(!email){
+        throw new Error("Email is required");
+    }else if(!validator.isEmail(email)){
+        throw new Error("Invalid email address");
+    }else if(!password){
+        throw new Error("Password is required");
+    }
+}
+
 module.exports={
-    validateSignup,
+    validateSignup, validateLogin
 }

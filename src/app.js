@@ -4,7 +4,7 @@ require("./config/database"); //require this file here
 const connectDb = require ('./config/database');
 const User=require('./models/user');
 const app = express();
-const{validateSignup}=require('./utils/validation');
+const{validateSignup, validateLogin}=require('./utils/validation');
 const bcrypt=require('bcrypt');
 
 app.use(express.json());
@@ -98,6 +98,7 @@ app.post("/signup", async (req, res) => {
 
         //encrypt password
         const {firstName, lastName, email, password} = req.body;
+
         const passwordHash = await bcrypt.hash(password, 10);
         console.log("Password hash:", passwordHash);
 
@@ -115,7 +116,22 @@ app.post("/signup", async (req, res) => {
 
 });
 
+//login api
+app.post("/login", async(req,res)=>{
+    try{
+        const{email,password}=req.body;
+        validateLogin(req); //validate login data
 
+        const sPasswordValid = await bcrypt.compare(password, (await User.findOne({email})).password);
+        if(!sPasswordValid){
+            return res.status(400).send("Invalid email or password");
+        }
+        res.send("Login successful");
+           
+    }catch(err){
+        res.status(500).send("Error logging in: " + err.message);
+    }
+})
 connectDb().then(()=>{
     console.log("Database connected successfully");
     app.listen(3000, () => {
