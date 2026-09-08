@@ -42,3 +42,5 @@
 - API level data validation
 - used validator package
 - email, password and other schema level validators added
+- Api level data validation done
+- learnt about password encryption using bcrypt
