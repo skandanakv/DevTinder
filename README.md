@@ -44,3 +44,4 @@
 - email, password and other schema level validators added
 - Api level data validation done
 - learnt about password encryption using bcrypt
+- login api, api data validation and bcrypt compare
