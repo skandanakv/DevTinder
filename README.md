@@ -45,3 +45,9 @@
 - Api level data validation done
 - learnt about password encryption using bcrypt
 - login api, api data validation and bcrypt compare
+- understood cookies, jwt and token usage
+- understood role of browsers here in storing cookies
+- res.cookie(); , req.cookies
+- deep dive jwt
+- learn token validation for every user made request
+- jwt.verify() & jwt.sign

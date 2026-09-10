@@ -6,8 +6,12 @@ const User=require('./models/user');
 const app = express();
 const{validateSignup, validateLogin}=require('./utils/validation');
 const bcrypt=require('bcrypt');
+const cookieParser=require("cookie-parser");
+app.use(cookieParser());
+const jwt = require("jsonwebtoken");
 
 app.use(express.json());
+
 
 
 //get user by email
@@ -116,17 +120,52 @@ app.post("/signup", async (req, res) => {
 
 });
 
+//get profile api
+app.get("/profile", async(req, res)=>{
+    try{
+    const cookies= req.cookies;
+    const{token}=cookies;
+
+    //validate token here
+     if(!token){
+        throw new Error("Invalid Token");
+    }
+    
+  const isValidToken = jwt.verify(token, "Skandana@DevTinder");
+
+    const{email}=isValidToken;
+    console.log("email from loggen in user:", email);
+
+    const user= await User.findOne({email});
+    if(!user){
+        return res.status(404).send("User not found");
+    }
+    res.send(user);
+    }catch(err){
+        res.status(500).send("Error getting profile: " + err.message);  
+    }
+})
+
 //login api
 app.post("/login", async(req,res)=>{
     try{
         const{email,password}=req.body;
         validateLogin(req); //validate login data
 
-        const sPasswordValid = await bcrypt.compare(password, (await User.findOne({email})).password);
-        if(!sPasswordValid){
+        const isPasswordValid = await bcrypt.compare(password, (await User.findOne({email})).password);
+        if(isPasswordValid){
+
+            //cookie logic here //create a token -> add token to cookie and resp back to user
+
+            const token = jwt.sign({email}, "Skandana@DevTinder");
+            console.log("token:", token);
+
+            res.cookie("token", token)
+
+            res.send("Login successful");
+        } else{
             return res.status(400).send("Invalid email or password");
         }
-        res.send("Login successful");
            
     }catch(err){
         res.status(500).send("Error logging in: " + err.message);
