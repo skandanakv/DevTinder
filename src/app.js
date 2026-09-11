@@ -9,6 +9,7 @@ const bcrypt=require('bcrypt');
 const cookieParser=require("cookie-parser");
 app.use(cookieParser());
 const jwt = require("jsonwebtoken");
+const {userAuth}= require("../Middleware/auth"); //require the userAuth middleware
 
 app.use(express.json());
 
@@ -121,25 +122,11 @@ app.post("/signup", async (req, res) => {
 });
 
 //get profile api
-app.get("/profile", async(req, res)=>{
+app.get("/profile", userAuth, async(req, res)=>{
     try{
-    const cookies= req.cookies;
-    const{token}=cookies;
-
-    //validate token here
-     if(!token){
-        throw new Error("Invalid Token");
-    }
     
-  const isValidToken = jwt.verify(token, "Skandana@DevTinder");
-
-    const{email}=isValidToken;
-    console.log("email from loggen in user:", email);
-
-    const user= await User.findOne({email});
-    if(!user){
-        return res.status(404).send("User not found");
-    }
+    const user= req.user; //get the user from the request object set by the middleware
+   
     res.send(user);
     }catch(err){
         res.status(500).send("Error getting profile: " + err.message);  
@@ -157,7 +144,9 @@ app.post("/login", async(req,res)=>{
 
             //cookie logic here //create a token -> add token to cookie and resp back to user
 
-            const token = jwt.sign({email}, "Skandana@DevTinder");
+            const user = await User.findOne({ email });
+
+            const token = jwt.sign({ _id: user._id },"Skandana@DevTinder");
             console.log("token:", token);
 
             res.cookie("token", token)
