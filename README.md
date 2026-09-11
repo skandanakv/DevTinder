@@ -53,3 +53,5 @@
 - jwt.verify() & jwt.sign
 - userAuth - Authentication middleware
 - token and cookie expiration
+
+- made list of APIs needed for the application
