@@ -51,3 +51,5 @@
 - deep dive jwt
 - learn token validation for every user made request
 - jwt.verify() & jwt.sign
+- userAuth - Authentication middleware
+- token and cookie expiration

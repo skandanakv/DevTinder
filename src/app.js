@@ -133,6 +133,14 @@ app.get("/profile", userAuth, async(req, res)=>{
     }
 })
 
+//connectionRequest api
+
+app.post("/connectionRequest",userAuth, async(req,res)=>{
+    const user=req.user;
+    console.log("sending a connection request from user:", user.email);
+    res.send("connection request sent from user: " + user.email);
+})
+
 //login api
 app.post("/login", async(req,res)=>{
     try{
@@ -146,10 +154,10 @@ app.post("/login", async(req,res)=>{
 
             const user = await User.findOne({ email });
 
-            const token = jwt.sign({ _id: user._id },"Skandana@DevTinder");
+            const token = jwt.sign({ _id: user._id },"Skandana@DevTinder",{expiresIn:"1d"});
             console.log("token:", token);
 
-            res.cookie("token", token)
+            res.cookie("token", token, {expires: new Date(Date.now() + 8 * 3600000)});
 
             res.send("Login successful");
         } else{
