@@ -55,3 +55,6 @@
 - token and cookie expiration
 
 - made list of APIs needed for the application
+- Routers created - profile, auth, request
+- logout api
+- /profile/view & /profile/edit api
