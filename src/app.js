@@ -2,172 +2,23 @@ require("dotenv").config();
 const express = require("express");
 require("./config/database"); //require this file here 
 const connectDb = require ('./config/database');
-const User=require('./models/user');
+const cookieParser = require("cookie-parser");
+
+
+
+const authRouter=require('./routes/auth');  //require routers here
+const RequestRouter=require('./routes/request');
+const profileRouter=require('./routes/profile');
+
 const app = express();
-const{validateSignup, validateLogin}=require('./utils/validation');
-const bcrypt=require('bcrypt');
-const cookieParser=require("cookie-parser");
-app.use(cookieParser());
-const jwt = require("jsonwebtoken");
-const {userAuth}= require("../Middleware/auth"); //require the userAuth middleware
-
 app.use(express.json());
+app.use(cookieParser());
+
+app.use('/', authRouter); //use routers here
+app.use('/', RequestRouter);
+app.use('/', profileRouter);
 
 
-
-//get user by email
-app.get("/user", async(req,res)=>{
-    const userEmail=req.body.email;
-    try{
-        const user=await User.findOne({email:userEmail});
-        if(!user){
-            return res.status(404).send("User not found");
-        }
-        res.send(user);
-    }catch(err){
-        res.status(500).send("Error fetching user: " + err.message);
-    }
-})
-
-//feed api to get all users
-app.get("/feed", async (req,res)=>{
-    try{
-        const users=await User.find({}); //passing empty filter to get all users
-        res.send(users);
-    }catch(err){
-        res.status(500).send("Error fetching feed: " + err.message);
-    }
-})
-
-//delete user by id
-app.delete("/user", async(req,res)=>{
-    const userId=req.body._id;
-    try{
-        const user=await User.findByIdAndDelete(userId);
-        if(!user){
-            return res.status(404).send("User not found");
-        }
-        res.send("User deleted successfully");
-    }catch(err){
-        res.status(500).send("Error deleting user: " + err.message);
-    }
-})
-
-//modify user by id - patch
-app.patch("/user/:id", async(req, res)=>{
-    const userId=req.params?.id;
-    const data=req.body;
-
-    const ALLOWED_UPDATES = [
-    "about","skills", "photoUrl", "age", "gender"
-    ]
-    
-    const isUpdateAllowed = Object.keys(data).every((k)=> ALLOWED_UPDATES.includes(k));
-    if(!isUpdateAllowed){
-        return res.status(400).send("Updates Not Allowed");
-    }
-
-
-    try{
-        const user=await User.findByIdAndUpdate(userId, data, {
-            returnDocument: "after", runValidators: true
-        });
-        if(!user){
-            return res.status(404).send("User not found");
-        }
-        res.send(user);
-    }catch(err){
-        res.status(500).send("Error updating user: " + err.message);
-    }
-})
-
-app.post("/signup", async (req, res) => {
-
-    const data = req.body;
-
-    const ALLOWED_FIELDS = [
-        "firstName","lastName","email","password","age","gender","photoUrl","about","skills"
-    ];
-
-    const isAllowed = Object.keys(data).every((field) =>
-        ALLOWED_FIELDS.includes(field)
-    );
-
-    if (!isAllowed) {
-        return res.status(400).send("Invalid fields provided");
-    }
-
-    try {
-        //validation of dat
-        validateSignup(req );
-
-        //encrypt password
-        const {firstName, lastName, email, password} = req.body;
-
-        const passwordHash = await bcrypt.hash(password, 10);
-        console.log("Password hash:", passwordHash);
-
-        const user = new User({firstName, lastName, email, password: passwordHash});
-
-        await user.save();
-
-        res.send("User created successfully");
-
-    } catch (err) {
-
-        res.status(400).send("Error creating user: " + err.message);
-
-    }
-
-});
-
-//get profile api
-app.get("/profile", userAuth, async(req, res)=>{
-    try{
-    
-    const user= req.user; //get the user from the request object set by the middleware
-   
-    res.send(user);
-    }catch(err){
-        res.status(500).send("Error getting profile: " + err.message);  
-    }
-})
-
-//connectionRequest api
-
-app.post("/connectionRequest",userAuth, async(req,res)=>{
-    const user=req.user;
-    console.log("sending a connection request from user:", user.email);
-    res.send("connection request sent from user: " + user.email);
-})
-
-//login api
-app.post("/login", async(req,res)=>{
-    try{
-        const{email,password}=req.body;
-        validateLogin(req); //validate login data
-
-        const isPasswordValid = await bcrypt.compare(password, (await User.findOne({email})).password);
-        if(isPasswordValid){
-
-            //cookie logic here //create a token -> add token to cookie and resp back to user
-
-            const user = await User.findOne({ email });
-
-            const token = jwt.sign({ _id: user._id },"Skandana@DevTinder",{expiresIn:"1d"});
-            console.log("token:", token);
-
-            res.cookie("token", token, {expires: new Date(Date.now() + 8 * 3600000)});
-
-            res.send("Login successful");
-        } else{
-            return res.status(400).send("Invalid email or password");
-        }
-           
-    }catch(err){
-        res.status(500).send("Error logging in: " + err.message);
-    }
-})
 connectDb().then(()=>{
     console.log("Database connected successfully");
     app.listen(3000, () => {
