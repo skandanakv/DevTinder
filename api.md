@@ -19,6 +19,10 @@
 - POST /request/send/interested/:id
 - POST /request/send/ignored/:id
 
+  > creating one api (making to dynamic to handle both interestes and ignored)
+
+- POST /request/send/:status/:id
+
 - POST /request/review/accepted/:id
 - POST /request/review/rejected/:id
 

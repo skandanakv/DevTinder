@@ -3,24 +3,30 @@ const mongoose=require("mongoose");
 const connectionRequestSchema=new mongoose.Schema({
     fromUserId:{
         required:true,
-        type:Mongoose.Schema.Types.ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
     },
       toUserId:{
         required:true,
-        type:Mongoose.Schema.Types.ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
     },
     status:{
+        type:String,
         required:true, 
         enum:{
-            values:["pending","accepted","rejected", "ignored"],
+            values:["interested","accepted","rejected", "ignored"],
             message: '{VALUE} is incorrect status type',
         }
     
     }
 
-    
 }, {timestamps:true});
 
-const connectionrequestModel=new mongoose.model("ConnectionRequest", connectionRequestSchema);
+// Prevent duplicate A → B requests at database level
+connectionRequestSchema.index(
+    { fromUserId: 1, toUserId: 1 },
+    { unique: true }
+);
 
-module.exports=connectionrequestModel;
+const ConnectionrequestModel=new mongoose.model("ConnectionRequest", connectionRequestSchema);
+
+module.exports=ConnectionrequestModel;
