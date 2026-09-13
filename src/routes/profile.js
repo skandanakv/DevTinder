@@ -48,7 +48,7 @@ profileRouter.patch("/profile/password", userAuth, async(req,res)=>{
         const isPasswordValid = await bcrypt.compare(
             oldPassword,
             loggedInUser.password
-        ); //always old pass first - IMPP
+        ); //always old password first - IMPP
 
         if (!isPasswordValid) {
             return res.status(400).send("Invalid old password");
