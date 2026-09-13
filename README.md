@@ -58,3 +58,4 @@
 - Routers created - profile, auth, request
 - logout api
 - /profile/view & /profile/edit api
+- /profile/password api
