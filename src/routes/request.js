@@ -51,11 +51,9 @@ RequestRouter.post("/request/send/:status/:toUserId",userAuth, async(req,res)=>{
             toUserId,
             status
         });
-
         const data = await connectionRequest.save(); //save the instance of ConnectionRequest model to the DB
 
-        res.json({message:"Connection request sent successfully!"
-         });
+        res.json({fromUser: req.user.firstName + " is " + status + " to " + toUser.firstName, data    });
     
 
     }catch(err){

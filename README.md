@@ -62,3 +62,6 @@
 - created connectionRequestSchema model
 - /request/send/:status/:toUserId - for interested and ignored
 - handled edge cases for this api like avoided multiple requests to same user, duploicated requests, allowed only required status, vice versa connection and random user id connection
+- learnt about schema.pre() method - runs before every save
+- learnt about importance of indexing and implemented compound indexing
+-
