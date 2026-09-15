@@ -65,3 +65,5 @@
 - learnt about schema.pre() method - runs before every save
 - learnt about importance of indexing and implemented compound indexing
 - code vaidation for API - POST /request/review/accepted/:id and POST /request/review/rejected/:id
+- userRouter done, api's done
+- used ref and populate to join collections
