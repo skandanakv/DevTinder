@@ -39,9 +39,17 @@ userRouter.get("/user/connections", userAuth, async(req,res)=>{
                 status:"accepted"}
             ]
             
-        }).populate("fromUserId",["firstName","lastName","photoUrl","age", "gender", "about", "skills"]);
+        }).populate("fromUserId",["firstName","lastName","photoUrl","age", "gender", "about", "skills"])
+        .populate("toUserId",["firstName","lastName","photoUrl","age", "gender", "about", "skills"]);
 
-        const data=connectionRequests.map((row)=>row.fromUserId);
+        // test bug - if toUserId is loggedInUser, then fromUserId is the connection and vice versa
+        const data=connectionRequests.map((row)=> {
+            if(row.fromUserId._id.toString() === loggedInUser._id.toString()){
+                return row.toUserId;
+            }else{
+                return row.fromUserId;
+            }
+            });
 
         res.json({message:"Connections", data});
 
