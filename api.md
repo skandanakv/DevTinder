@@ -21,10 +21,14 @@
 
   > creating one api (making to dynamic to handle both interestes and ignored)
 
-- POST /request/send/:status/:id
+  > POST /request/send/:status/:id /
 
 - POST /request/review/accepted/:id
 - POST /request/review/rejected/:id
+
+  > creating one api (making to dynamic to handle both accepted and rejected)
+
+  > POST POST /request/review/:status/:id
 
 ### userRouter
 
