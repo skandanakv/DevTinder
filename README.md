@@ -68,3 +68,4 @@
 - userRouter done, api's done
 - used ref and populate to join collections
 - built /feed api . looked into various edge cases
+- implemented pagination. used limit() and skip() functions

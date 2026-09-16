@@ -71,6 +71,11 @@ userRouter.get("/feed", userAuth, async(req,res)=>{
 
         const loggedInUser=req.user;
 
+        const page = req.query.page || 1;
+        const limit = req.query.limit || 2;
+        const skip = (page - 1) * limit;
+        limit = limit > 50 ? 50 : limit; //check if limit is more than 50, keep it to 50
+
         //get all sent+received and remove them
         const Connectionrequest=await ConnectionRequest.find({
             $or:[
@@ -92,7 +97,7 @@ userRouter.get("/feed", userAuth, async(req,res)=>{
             {_id:{$nin:[...hideUserFromFeed]}}, //id not in hidden set
             {_id:{$ne:loggedInUser._id}}  // id not equal to loggedInUser
         ],
-    }).select("firstName lastName photoUrl age gender about skills");
+    }).select("firstName lastName photoUrl age gender about skills").skip(skip).limit(limit);
     
 
         res.send(users);
