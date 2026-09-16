@@ -2,6 +2,7 @@ const express=require("express");
 const {userAuth}= require("../../Middleware/auth");
 const {user}= require("../models/user");
 const ConnectionRequest=require("../models/connectionRequest");
+const User=require("../models/user");
 
 
 const userRouter=express.Router();
@@ -56,6 +57,48 @@ userRouter.get("/user/connections", userAuth, async(req,res)=>{
 
     }catch(err){
         res.send(500).send("Error:  " + err.message);
+    }
+})
+
+//get user feed
+userRouter.get("/feed", userAuth, async(req,res)=>{
+    try{
+        // 0. not his own card
+        // 1. not his connections
+        // 2. not ignored ppl
+        // 3. not rejected ppl
+        // 4. interested ppl - already sent connection request to 
+
+        const loggedInUser=req.user;
+
+        //get all sent+received and remove them
+        const Connectionrequest=await ConnectionRequest.find({
+            $or:[
+                {fromUserId:loggedInUser._id},
+                {toUserId:loggedInUser._id}
+            ]
+        }).select("toUserId fromUserId");
+
+        //creating set ds
+        const hideUserFromFeed=new Set();
+
+        Connectionrequest.forEach((req)=>{
+        hideUserFromFeed.add(req.fromUserId.toString());
+        hideUserFromFeed.add(req.toUserId.toString());
+    });  //here u get the ids of ppl who we want to hide from feed
+
+    const users=await User.find({
+        $and:[
+            {_id:{$nin:[...hideUserFromFeed]}}, //id not in hidden set
+            {_id:{$ne:loggedInUser._id}}  // id not equal to loggedInUser
+        ],
+    }).select("firstName lastName photoUrl age gender about skills");
+    
+
+        res.send(users);
+
+    }catch(err){
+        res.status(500).send("Error:  " + err.message);
     }
 })
 
