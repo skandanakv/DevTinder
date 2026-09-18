@@ -3,7 +3,7 @@ const express = require("express");
 require("./config/database"); //require this file here 
 const connectDb = require ('./config/database');
 const cookieParser = require("cookie-parser");
-const cors = require('cors'); 
+const cors = require('cors'); // import cors
 
 
 
@@ -14,7 +14,10 @@ const profileRouter=require('./routes/profile');
 const userRouter=require('./routes/userRouter');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true,
+})); // enable cors
 app.use(express.json());
 app.use(cookieParser());
 
