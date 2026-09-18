@@ -69,3 +69,4 @@
 - used ref and populate to join collections
 - built /feed api . looked into various edge cases
 - implemented pagination. used limit() and skip() functions
+- came back to handle axios error - cors()

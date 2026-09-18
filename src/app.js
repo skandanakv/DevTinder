@@ -3,6 +3,8 @@ const express = require("express");
 require("./config/database"); //require this file here 
 const connectDb = require ('./config/database');
 const cookieParser = require("cookie-parser");
+const cors = require('cors'); 
+
 
 
 
@@ -12,6 +14,7 @@ const profileRouter=require('./routes/profile');
 const userRouter=require('./routes/userRouter');
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
