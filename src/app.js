@@ -15,7 +15,7 @@ const userRouter=require('./routes/userRouter');
 
 const app = express();
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: "http://localhost:5173", //whitelisting this origin
   credentials: true,
 })); // enable cors
 app.use(express.json());
