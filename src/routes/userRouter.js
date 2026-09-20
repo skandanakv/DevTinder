@@ -71,10 +71,12 @@ userRouter.get("/feed", userAuth, async(req,res)=>{
 
         const loggedInUser=req.user;
 
-        const page = req.query.page || 1;
-        const limit = req.query.limit || 2;
-        const skip = (page - 1) * limit;
-        limit = limit > 50 ? 50 : limit; //check if limit is more than 50, keep it to 50
+const page = req.query.page || 1;
+let limit = req.query.limit || 2;
+
+const skip = (page - 1) * limit;
+
+limit = limit > 50 ? 50 : limit;
 
         //get all sent+received and remove them
         const Connectionrequest=await ConnectionRequest.find({
